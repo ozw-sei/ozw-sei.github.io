@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>日々のChangeLog</title><link>https://ozw-sei.github.io/</link><description>Recent content on 日々のChangeLog</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>©{year}, All Rights Reserved</copyright><lastBuildDate>Tue, 24 Feb 2099 15:07:39 +0900</lastBuildDate><atom:link href="https://ozw-sei.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>About TIL</title><link>https://ozw-sei.github.io/about_til/</link><pubDate>Tue, 24 Feb 2099 15:07:39 +0900</pubDate><guid>https://ozw-sei.github.io/about_til/</guid><description>元同僚が Githubのリポジトリ「TIL」を使って小さなアウトプットを習慣化する に影響を受けたのを真似し始めた。
 元々Evernoteとかでメモ取る習慣あったんだけど、はてなブログやQiita開くと他人の投稿に気が散ってしまうのでアウトプットにならず死蔵されていた。
 Hugo みたくGithubで管理できるならば、検索も簡単なのでえいやで初めてしまった。
-同僚への説明資料とかが含まれるかもしれんけど、それはご愛嬌</description></item><item><title>いつも使う python の pre-commit</title><link>https://ozw-sei.github.io/posts/2021-05-14-180124/</link><pubDate>Fri, 14 May 2021 18:01:40 +0900</pubDate><guid>https://ozw-sei.github.io/posts/2021-05-14-180124/</guid><description>ほぼ、自分用のメモ書き.
+同僚への説明資料とかが含まれるかもしれんけど、それはご愛嬌</description></item><item><title>自己紹介</title><link>https://ozw-sei.github.io/about/</link><pubDate>Sat, 29 Jun 2024 20:18:24 +0900</pubDate><guid>https://ozw-sei.github.io/about/</guid><description>鳥類を二羽飼育している個人事業主
+ゲーマー、ソフトウェアエンジニア.
+連絡先 seijiro4751@gmail.com Twitter Github 関心 ゲーム開発（Unity, UnrealEngine5） 画像処理 3DCG gcp, grpc 好きな言語 Python TypeScript Go C# お仕事 WebDevelopment GameDevelopment</description></item><item><title>いつも使う python の pre-commit</title><link>https://ozw-sei.github.io/posts/2021-05-14-180124/</link><pubDate>Fri, 14 May 2021 18:01:40 +0900</pubDate><guid>https://ozw-sei.github.io/posts/2021-05-14-180124/</guid><description>ほぼ、自分用のメモ書き.
 autoflake8 -&amp;gt; flake8の自動フォーマットツールなんだけど、ここでは未使用の変数とか自動で削除するために使ってる.
 black -&amp;gt; 自動フォーマット
 isort -&amp;gt; 自動でimportのsort
