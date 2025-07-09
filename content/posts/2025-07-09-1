@@ -1,0 +1,23 @@
+---
+title: config
+date: 2025-07-09T14:17:57+09:00
+draft: false
+categories: ["diary"]
+tags: ["til"]
+---
+
+knip という便利ツーる
+
+Knipは、TypeScript/JavaScriptのコードベースの不要なコードを検出するCLIツールです。
+
+以下が検出できる不要なコードの例です。
+
+package.jsonのdependencies/devDependenciesの中で使われていないpackage
+exportされているがどこからもimportされていない変数、関数、型など
+使用していないファイル
+その他、検出できる内容の一覧はこちらで確認できます。
+
+kwsk
+
+https://tech.basemachina.jp/entry/introduction-knip
+
