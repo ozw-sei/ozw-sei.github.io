@@ -14,7 +14,7 @@ Python3.7以降ならば動作するはず。
 
 キーが足りないと動かないので注意
 
-```
+```python
 from dataclasses import dataclass
 
 @dataclass

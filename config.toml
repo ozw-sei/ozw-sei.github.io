@@ -1,49 +1,92 @@
 baseURL = "https://ozw-sei.github.io/"
 locale = "ja"
+defaultContentLanguage = "ja"
+hasCJKLanguage = true
 title = "日々のChangeLog"
-theme = "contrast-hugo"
-copyright = "©{year}, All Rights Reserved"
+theme = "hugo-theme-stack"
+# Bare numbers are seconds in Hugo 0.168. The old `10000` meant 10s.
 timeout = "10s"
+# Hugo 0.168 title-cases list titles ("diary" -> "Diary"). Keep the existing titles.
 capitalizeListTitles = false
 
-[services]
-  [services.googleAnalytics]
-    id = "UA-54423559-4"
+[markup]
+  [markup.highlight]
+    # Stack colors fenced code with CSS classes so dark mode can restyle it.
+    noClasses = false
 
 [params]
-  sidebar = true
-  show_excerpts = false
   description = "完全に立ち往生したエンジニア"
   mainSections = ["posts"]
 
-[menu]
-[[menu.main]]
-name = "Home"
-url = "/"
-identifier = "home"
-weight = 1
+  [params.sidebar]
+    subtitle = "完全に立ち往生したエンジニア"
+    avatar = "/images/profile.jpg"
+
+  [params.footer]
+    since = 2020
+
+  [params.article]
+    toc = true
+    readingTime = true
+
+  [params.comments]
+    enabled = false
+
+  [params.colorScheme]
+    toggle = true
+    default = "auto"
+
+  [params.widgets]
+    page = [
+      { type = "toc" },
+    ]
 
 [[menu.main]]
-name = "TIL"
-url = "/categories/til"
-identifier = "book"
-weight = 2
+  name = "Home"
+  url = "/"
+  weight = 1
+  [menu.main.params]
+    icon = "home"
 
 [[menu.main]]
-name = "diary"
-url = "/categories/diary"
-identifier = "calendar"
-weight = 3
+  name = "TIL"
+  url = "/categories/til/"
+  weight = 2
+  [menu.main.params]
+    icon = "categories"
 
 [[menu.main]]
-name = "Tags"
-url = "/tags/"
-identifier = "tag"
-weight = 4
-
+  name = "diary"
+  url = "/categories/diary/"
+  weight = 3
+  [menu.main.params]
+    icon = "date"
 
 [[menu.main]]
-name = "About"
-url = "/about/"
-identifier = "address-card"
-weight = 5
+  name = "Tags"
+  url = "/tags/"
+  weight = 4
+  [menu.main.params]
+    icon = "tag"
+
+[[menu.main]]
+  name = "プラモ"
+  url = "/plamo/"
+  weight = 5
+  [menu.main.params]
+    icon = "archives"
+
+[[menu.main]]
+  name = "About"
+  url = "/about/"
+  weight = 6
+  [menu.main.params]
+    icon = "user"
+
+[[menu.social]]
+  name = "GitHub"
+  url = "https://github.com/ozw-sei/"
+  weight = 1
+  [menu.social.params]
+    icon = "brand-github"
+    newTab = true

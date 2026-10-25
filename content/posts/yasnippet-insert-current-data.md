@@ -14,7 +14,7 @@ yasnippetのスニッペット展開時に日付を一緒に挿入してほし�
 便利
 
 
-```
+```yaml
 ---
 title: ${1:title}
 date: `(concat

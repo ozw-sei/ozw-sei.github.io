@@ -1,0 +1,45 @@
+{{ define "main" }}
+<header>
+    <h3 class="section-title">{{ T "list.section" }}</h3>
+    <div class="section-card">
+        <div class="section-details">
+            <h3 class="section-count">{{ T "list.page" (len .RegularPages) }}</h3>
+            <h1 class="section-term">{{ .Title }}</h1>
+            {{ with .Plain }}
+                <h2 class="section-description">{{ . }}</h2>
+            {{ end }}
+        </div>
+    </div>
+</header>
+
+{{ $groups := slice
+    (dict "label" "制作中" "status" "制作中" "sort" "Params.start")
+    (dict "label" "完成" "status" "完成" "sort" "Params.finish")
+}}
+{{ range $groups }}
+<h2 class="section-title">{{ .label }}</h2>
+{{ $items := where $.RegularPages "Params.status" .status }}
+{{ $items = sort $items .sort "desc" }}
+{{ if $items }}
+<section class="article-list">
+    {{ range $items }}
+        {{ partial "article-list/default" . }}
+    {{ end }}
+</section>
+{{ else }}
+<p>まだありません</p>
+{{ end }}
+{{ end }}
+
+{{ $other := where .RegularPages "Params.status" "not in" (slice "制作中" "完成") }}
+{{ with $other }}
+<h2 class="section-title">その他</h2>
+<section class="article-list">
+    {{ range . }}
+        {{ partial "article-list/default" . }}
+    {{ end }}
+</section>
+{{ end }}
+
+{{ partialCached "footer/footer" . }}
+{{ end }}

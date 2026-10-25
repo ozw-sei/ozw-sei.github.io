@@ -27,7 +27,7 @@ https://www.debian.org/distrib/
 
 ゲストＯＳで下記の設定を追加
 
-```
+```ini
 "/etc/systemd/network/enp0s8.network" というファイルを作り，次のように記入する．
 [Match]
 enp0s8
