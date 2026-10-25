@@ -1,0 +1,11 @@
+#!/bin/sh
+# Optional example. This repo does not install git hooks.
+# Copy it yourself if you want a commit to fail while EXIF is still present:
+#
+#   cp scripts/pre-commit.example .git/hooks/pre-commit
+#   chmod +x .git/hooks/pre-commit
+#
+# The hook only checks. Remove the metadata with scripts/strip-exif.sh.
+
+root=$(git rev-parse --show-toplevel) || exit 1
+exec "$root/scripts/strip-exif.sh" --check

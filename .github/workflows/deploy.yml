@@ -16,6 +16,12 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Reject image EXIF
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libimage-exiftool-perl
+          scripts/strip-exif.sh --check
+
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
         with:
