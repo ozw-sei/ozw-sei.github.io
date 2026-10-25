@@ -1,0 +1,59 @@
+{{ define "head" }}
+<link rel="stylesheet" href="{{ "css/plamo.css" | relURL }}">
+{{ end }}
+
+{{ define "main" }}
+<article class="plamo-index">
+  <header><h1>{{ .Title }}</h1></header>
+  {{ .Content }}
+
+  {{ $groups := slice
+    (dict "label" "制作中" "status" "制作中" "sort" "Params.start")
+    (dict "label" "完成" "status" "完成" "sort" "Params.finish")
+  }}
+  {{ range $groups }}
+  <section class="plamo-group">
+    <h2>{{ .label }}</h2>
+    {{ $items := where $.RegularPages "Params.status" .status }}
+    {{ $items = sort $items .sort "desc" }}
+    {{ if $items }}
+    <ul class="plamo-cards">
+      {{ range $items }}
+      <li>
+        <a href="{{ .RelPermalink }}">
+          {{ partial "plamo-thumb.html" . }}
+          <span class="plamo-card-title">{{ .Params.kit | default .Title }}</span>
+          {{ if or .Params.maker .Params.scale }}
+          <span class="plamo-card-meta">
+            {{ with .Params.maker }}<span>{{ . }}</span>{{ end }}
+            {{ with .Params.scale }}<span>{{ . }}</span>{{ end }}
+          </span>
+          {{ end }}
+        </a>
+      </li>
+      {{ end }}
+    </ul>
+    {{ else }}
+    <p class="plamo-empty">まだありません</p>
+    {{ end }}
+  </section>
+  {{ end }}
+
+  {{ $other := where .RegularPages "Params.status" "not in" (slice "制作中" "完成") }}
+  {{ with $other }}
+  <section class="plamo-group">
+    <h2>その他</h2>
+    <ul class="plamo-cards">
+      {{ range . }}
+      <li>
+        <a href="{{ .RelPermalink }}">
+          {{ partial "plamo-thumb.html" . }}
+          <span class="plamo-card-title">{{ .Params.kit | default .Title }}</span>
+        </a>
+      </li>
+      {{ end }}
+    </ul>
+  </section>
+  {{ end }}
+</article>
+{{ end }}

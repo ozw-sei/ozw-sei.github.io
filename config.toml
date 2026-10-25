@@ -1,15 +1,18 @@
 baseURL = "https://ozw-sei.github.io/"
-languageCode = "ja"
+locale = "ja"
 title = "日々のChangeLog"
 theme = "contrast-hugo"
 googleAnalytics = "UA-54423559-4"
 copyright = "©{year}, All Rights Reserved"
 timeout = 10000
+# Hugo 0.168 title-cases list titles ("diary" -> "Diary"). Keep the existing titles.
+capitalizeListTitles = false
 
 [params]
-sidebar = true
-show_excerpts = false
-description = '完全に立ち往生したエンジニア'
+  sidebar = true
+  show_excerpts = false
+  description = '完全に立ち往生したエンジニア'
+  mainSections = ["posts"]
 
 [menu]
 [[menu.main]]
@@ -36,9 +39,14 @@ url = "/tags/"
 identifier = "tag"
 weight = 4
 
+[[menu.main]]
+name = "プラモ"
+url = "/plamo/"
+identifier = "palette"
+weight = 5
 
 [[menu.main]]
 name = "About"
 url = "/about/"
 identifier = "address-card"
-weight = 5
+weight = 6
