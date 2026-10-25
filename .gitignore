@@ -1,2 +1,6 @@
 *~
 public/
+.hugo_build.lock
+.playwright-mcp/
+__pycache__/
+*.pyc
