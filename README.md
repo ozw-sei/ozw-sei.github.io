@@ -1,5 +1,7 @@
 # 日々のChangeLog
 
+最初に `pre-commit install`（または `make setup`）を一度実行する。写真に EXIF / GPS が残っているとコミットできない。公開する JPEG は、その前に `scripts/compress-photos.py` を通す。
+
 Hugo extended 0.168.0 でビルドします。テーマ `contrast-hugo` は git submodule です。
 
 ```sh
@@ -51,18 +53,22 @@ HEIC は追加で `pip install pillow-heif` が要る。
 
 ## 公開画像に EXIF を残さない
 
-`content/` と `static/` に EXIF、GPS、XMP、IPTC が残っていると CI が失敗する。メッセージどおりに次を実行して、差分をコミットする。
+コミット時の検査が本線です。`pip install pre-commit` のあと、次のどちらかを一度実行します。
+
+```sh
+pre-commit install
+make setup
+```
+
+フックは [exif-stripper](https://github.com/stefmolin/exif-stripper) 1.3.1（`strip-exif`）です。ステージした画像に EXIF があるとコミットを止め、GPS、メーカー、シリアル、XMP、IPTC を消したファイルに書き換えます。直したファイルを足し直してから、もう一度コミットします。
+
+このフックは `Orientation` を残し、ピクセル自体は回転しません。ブラウザは向きタグを見て正しく表示しますが、タグを無視する処理ではスマホ写真が横倒しになります。フックが書き換えた JPEG にも向きタグが残るので、CI の検査にも引っかかります。公開前に `scripts/compress-photos.py` を通せば、向きはピクセルに入り、メタデータは残りません。
+
+CI は保険です。`content/` と `static/` に EXIF、GPS、XMP、IPTC が残っていると失敗します。そのときは次を実行して差分をコミットします。
 
 ```sh
 sudo apt install libimage-exiftool-perl exiftran python3-pil
 scripts/strip-exif.sh
 ```
 
-JPEG の向きは `exiftran` でロスレスに回してからメタデータを消す。検査だけなら `scripts/strip-exif.sh --check`（`exiftool` だけでよい）。
-
-pre-commit は入れていない。使うなら自分でコピーする。
-
-```sh
-cp scripts/pre-commit.example .git/hooks/pre-commit
-chmod +x .git/hooks/pre-commit
-```
+JPEG の向きは `exiftran` でロスレスに回してからメタデータを消します。検査だけなら `scripts/strip-exif.sh --check` です。
