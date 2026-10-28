@@ -1,46 +1,73 @@
-<!doctype html><html lang=ja><title>Pythonのデータクラスをdictionaryからデシリアライズする書き方 | 日々のChangeLog</title><meta charset=utf-8><meta name=generator content="Hugo 0.168.0"><meta name=description content="完全に立ち往生したエンジニア"><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=https://ozw-sei.github.io/css/index.css><link rel=stylesheet href=https://ozw-sei.github.io/css/classes.css><link rel=stylesheet href=https://ozw-sei.github.io/css/sidebar.css media="screen and (min-width: 70em)"><link rel=canonical href=https://ozw-sei.github.io/posts/python-dataclass-from-dictionary/><link rel=alternate type=application/rss+xml href title=日々のChangeLog><body><header class=icons><a href=https://ozw-sei.github.io/>日々のChangeLog</a><nav><a href=/><span class=hidden><svg viewBox="0 0 576 512"><path d="M280.37 148.26 96 300.11V464a16 16 0 0016 16l112.06-.29a16 16 0 0015.92-16V368a16 16 0 0116-16h64a16 16 0 0116 16v95.64a16 16 0 0016 16.05L464 480a16 16 0 0016-16V3e2L295.67 148.26a12.19 12.19.0 00-15.3.0zM571.6 251.47 488 182.56V44.05a12 12 0 00-12-12h-56a12 12 0 00-12 12v72.61L318.47 43a48 48 0 00-61 0L4.34 251.47a12 12 0 00-1.6 16.9l25.5 31A12 12 0 0045.15 301l235.22-193.74a12.19 12.19.0 0115.3.0L530.9 301a12 12 0 0016.9-1.6l25.5-31a12 12 0 00-1.7-16.93z"/></svg></span>
-<span>Home</span>
-</a><a href=/categories/til><span class=hidden><svg viewBox="0 0 448 512"><path d="M448 360V24c0-13.3-10.7-24-24-24H96C43 0 0 43 0 96v320c0 53 43 96 96 96h328c13.3.0 24-10.7 24-24v-16c0-7.5-3.5-14.3-8.9-18.7-4.2-15.4-4.2-59.3.0-74.7 5.4-4.3 8.9-11.1 8.9-18.6zM128 134c0-3.3 2.7-6 6-6h212c3.3.0 6 2.7 6 6v20c0 3.3-2.7 6-6 6H134c-3.3.0-6-2.7-6-6v-20zm0 64c0-3.3 2.7-6 6-6h212c3.3.0 6 2.7 6 6v20c0 3.3-2.7 6-6 6H134c-3.3.0-6-2.7-6-6v-20zm253.4 250H96c-17.7.0-32-14.3-32-32 0-17.6 14.4-32 32-32h285.4c-1.9 17.1-1.9 46.9.0 64z"/></svg></span>
-<span>TIL</span>
-</a><a href=/categories/diary><span class=hidden><svg viewBox="0 0 448 512"><path d="M12 192h424c6.6.0 12 5.4 12 12v260c0 26.5-21.5 48-48 48H48c-26.5.0-48-21.5-48-48V204c0-6.6 5.4-12 12-12zm436-44v-36c0-26.5-21.5-48-48-48h-48V12c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v52H160V12c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v52H48C21.5 64 0 85.5.0 112v36c0 6.6 5.4 12 12 12h424c6.6.0 12-5.4 12-12z"/></svg></span>
-<span>diary</span>
-</a><a href=/tags/><span class=hidden><svg viewBox="0 0 512 512"><path d="M0 252.118V48C0 21.49 21.49.0 48 0h204.118a48 48 0 0133.941 14.059l211.882 211.882c18.745 18.745 18.745 49.137.0 67.882L293.823 497.941c-18.745 18.745-49.137 18.745-67.882.0L14.059 286.059A48 48 0 010 252.118zM112 64c-26.51.0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48z"/></svg></span>
-<span>Tags</span>
-</a><a href=/plamo/><span class=hidden><svg viewBox="0 0 512 512"><path d="M204.3 5C104.9 24.4 24.8 104.3 5.2 203.4c-37 187 131.7 326.4 258.8 306.7 41.2-6.4 61.4-54.6 42.5-91.7-23.1-45.4 9.9-98.4 60.9-98.4h79.7c35.8.0 64.8-29.6 64.9-65.3C511.5 97.1 368.1-26.9 204.3 5zM96 320c-17.7.0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm32-128c-17.7.0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm128-64c-17.7.0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm128 64c-17.7.0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32z"/></svg></span>
-<span>プラモ</span>
-</a><a href=/about/><span class=hidden><svg viewBox="0 0 576 512"><path d="M528 32H48C21.5 32 0 53.5.0 80v352c0 26.5 21.5 48 48 48h480c26.5.0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm-352 96c35.3.0 64 28.7 64 64s-28.7 64-64 64-64-28.7-64-64 28.7-64 64-64zm112 236.8c0 10.6-10 19.2-22.4 19.2H86.4C74 384 64 375.4 64 364.8v-19.2c0-31.8 30.1-57.6 67.2-57.6h5c12.3 5.1 25.7 8 39.8 8s27.6-2.9 39.8-8h5c37.1.0 67.2 25.8 67.2 57.6v19.2zM512 312c0 4.4-3.6 8-8 8H360c-4.4.0-8-3.6-8-8v-16c0-4.4 3.6-8 8-8h144c4.4.0 8 3.6 8 8v16zm0-64c0 4.4-3.6 8-8 8H360c-4.4.0-8-3.6-8-8v-16c0-4.4 3.6-8 8-8h144c4.4.0 8 3.6 8 8v16zm0-64c0 4.4-3.6 8-8 8H360c-4.4.0-8-3.6-8-8v-16c0-4.4 3.6-8 8-8h144c4.4.0 8 3.6 8 8v16z"/></svg></span>
-<span>About</span></a></nav><div class="hidden description">完全に立ち往生したエンジニア</div></header><article><header><a href=https://ozw-sei.github.io/categories/til/>TIL</a><h1>Pythonのデータクラスをdictionaryからデシリアライズする書き方</h1><time datetime=2020-02-23T22:06:17+09:00>February 23, 2020</time></header><p>Pythonのデータクラスをdictionaryからデシリアライズする書き方
+<!doctype html><html lang=ja dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="Pythonのデータクラスをdictionaryからデシリアライズする書き方 同僚のコードレビューをしていたえときにレスポンスのdictをそのまま使っていたのだけど、 「短いコードだから辞書のままで良くない？class書くのボイラープレート多いし」と心の声が聞こえたので覚書。\n"><title>Pythonのデータクラスをdictionaryからデシリアライズする書き方</title><link rel=canonical href=https://ozw-sei.github.io/posts/python-dataclass-from-dictionary/><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=preload as=style href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap"><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap"><link rel=stylesheet href=/scss/style.min.5f20994fc2b22ec1b639c176124b729284351de3413205e73856538842f87adb.css><meta property='og:title' content="Pythonのデータクラスをdictionaryからデシリアライズする書き方"><meta property='og:description' content="Pythonのデータクラスをdictionaryからデシリアライズする書き方 同僚のコードレビューをしていたえときにレスポンスのdictをそのまま使っていたのだけど、 「短いコードだから辞書のままで良くない？class書くのボイラープレート多いし」と心の声が聞こえたので覚書。\n"><meta property='og:url' content='https://ozw-sei.github.io/posts/python-dataclass-from-dictionary/'><meta property='og:site_name' content='日々のChangeLog'><meta property='og:type' content='article'><meta property='article:section' content='Posts'><meta property='article:tag' content='python'><meta property='article:published_time' content='2020-02-23T22:06:17+09:00'><meta property='article:modified_time' content='2020-02-23T22:06:17+09:00'><meta name=twitter:title content="Pythonのデータクラスをdictionaryからデシリアライズする書き方"><meta name=twitter:description content="Pythonのデータクラスをdictionaryからデシリアライズする書き方 同僚のコードレビューをしていたえときにレスポンスのdictをそのまま使っていたのだけど、 「短いコードだから辞書のままで良くない？class書くのボイラープレート多いし」と心の声が聞こえたので覚書。\n"></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=メニューを開く・閉じる>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/images/profile.jpg width=73 height=73 class=site-logo loading=lazy alt=Avatar></a></figure><div class=site-meta><h1 class=site-name><a href=/>日々のChangeLog</a></h1><h2 class=site-description>完全に立ち往生したエンジニア</h2></div></header><ol class=menu-social><li><a href=https://github.com/ozw-sei/ target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=/categories/til/><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+<span>TIL</span></a></li><li><a href=/categories/diary/><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<span>diary</span></a></li><li><a href=/tags/><svg class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11 3l9 9a1.5 1.5.0 010 2l-6 6a1.5 1.5.0 01-2 0L3 11V7a4 4 0 014-4h4"/><circle cx="9" cy="9" r="2"/></svg>
+<span>Tags</span></a></li><li><a href=/plamo/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>プラモ</span></a></li><li><a href=/about/><svg class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg>
+<span>About</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>ダークモード</span></li></ol></li></ol></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><header class=article-category><a href=/categories/til/ style=background-color:#bed9ef;color:#0f293d>til</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/posts/python-dataclass-from-dictionary/>Pythonのデータクラスをdictionaryからデシリアライズする書き方</a></h2></div><footer class=article-meta><div class=inline-meta><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published datetime=2020-02-23T22:06:17+09:00>2020年2月23日日曜日</time>
+<svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>読了時間: 1分</time></div></footer></div></header><section class=article-content><p>Pythonのデータクラスをdictionaryからデシリアライズする書き方
 同僚のコードレビューをしていたえときにレスポンスのdictをそのまま使っていたのだけど、
-「短いコードだから辞書のままで良くない？class書くのボイラープレート多いし」と心の声が聞こえたので覚書。</p><p>Python3.7以降ならば動作するはず。</p><p>キーが足りないと動かないので注意</p><pre tabindex=0><code>from dataclasses import dataclass
+「短いコードだから辞書のままで良くない？class書くのボイラープレート多いし」と心の声が聞こえたので覚書。</p><p>Python3.7以降ならば動作するはず。</p><p>キーが足りないと動かないので注意</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>from</span> <span class=nn>dataclasses</span> <span class=kn>import</span> <span class=n>dataclass</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nd>@dataclass</span>
+</span></span><span class=line><span class=cl><span class=k>class</span> <span class=nc>Person</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=n>name</span><span class=p>:</span> <span class=nb>str</span>
+</span></span><span class=line><span class=cl>    <span class=n>home_town</span><span class=p>:</span> <span class=nb>str</span>
+</span></span><span class=line><span class=cl>    <span class=n>age</span><span class=p>:</span> <span class=nb>int</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>source_dict</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;name&#34;</span><span class=p>:</span> <span class=s2>&#34;Mother Fxxer&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;home_town&#34;</span><span class=p>:</span> <span class=s2>&#34;Kick Ass&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;age&#34;</span><span class=p>:</span> <span class=mi>16</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 普通に作る</span>
+</span></span><span class=line><span class=cl><span class=n>normal</span> <span class=o>=</span> <span class=n>Person</span><span class=p>(</span><span class=s2>&#34;Mother Fxxer&#34;</span><span class=p>,</span> <span class=s2>&#34;Kick Ass&#34;</span><span class=p>,</span> <span class=mi>16</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 辞書から作る</span>
+</span></span><span class=line><span class=cl><span class=n>from_dict</span> <span class=o>=</span> <span class=n>Person</span><span class=p>(</span><span class=o>**</span><span class=n>source_dict</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=n>normal</span> <span class=o>==</span> <span class=n>from_dict</span><span class=p>)</span> 
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>## おまけ</span>
+</span></span><span class=line><span class=cl><span class=c1># キーが足りない場合</span>
+</span></span><span class=line><span class=cl><span class=n>source_dict</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>from_dict</span> <span class=o>=</span> <span class=n>Person</span><span class=p>(</span><span class=o>**</span><span class=n>source_dict</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=c1># Traceback (most recent call last):</span>
+</span></span><span class=line><span class=cl><span class=c1>#  File &#34;qr_Z3i1cj&#34;, line 27, in &lt;module&gt;</span>
+</span></span><span class=line><span class=cl><span class=c1>#    from_dict = Person(**source_dict)</span>
+</span></span><span class=line><span class=cl><span class=c1># TypeError: __init__() missing 3 required positional arguments: &#39;name&#39;, &#39;home_town&#39;, and &#39;age&#39;</span>
+</span></span></code></pre></div></section><footer class="article-meta article-footer"><section class=article-tags><a href=/tags/python/>python</a></section></footer></article><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2026 日々のChangeLog</section><section class=powerby><a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> で構築されています。<br>テーマ <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=4.0.3>Stack</a></b> は <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> によって設計されています。</section></footer><script type=module>
+    import gallery from '\/ts\/gallery.js';
 
-@dataclass
-class Person:
-    name: str
-    home_town: str
-    age: int
+    const articleContent = document.querySelector('.article-content');
+    const shouldLoad = articleContent && (articleContent.querySelectorAll('figure').length > 0 || articleContent.querySelectorAll('img.gallery-image').length > 0);
+    
+    if (shouldLoad) {
+        gallery(articleContent);
 
-source_dict = {
-    &#34;name&#34;: &#34;Mother Fxxer&#34;,
-    &#34;home_town&#34;: &#34;Kick Ass&#34;,
-    &#34;age&#34;: 16
-}
+        const PhotoSwipeLightbox = (await import("https:\/\/cdn.jsdelivr.net\/npm\/photoswipe@5.4.4\/dist\/photoswipe-lightbox.esm.min.js")).default;
+        const styleHref = "https:\/\/cdn.jsdelivr.net\/npm\/photoswipe@5.4.4\/dist\/photoswipe.css";
 
-# 普通に作る
-normal = Person(&#34;Mother Fxxer&#34;, &#34;Kick Ass&#34;, 16)
+        const styleTag = document.createElement('link');
+        styleTag.rel = 'stylesheet';
+        styleTag.href = styleHref;
+        document.head.appendChild(styleTag);
 
-# 辞書から作る
-from_dict = Person(**source_dict)
-
-print(normal == from_dict) 
-
-## おまけ
-# キーが足りない場合
-source_dict = {
-}
-
-from_dict = Person(**source_dict)
-# Traceback (most recent call last):
-#  File &#34;qr_Z3i1cj&#34;, line 27, in &lt;module&gt;
-#    from_dict = Person(**source_dict)
-# TypeError: __init__() missing 3 required positional arguments: &#39;name&#39;, &#39;home_town&#39;, and &#39;age&#39;
-</code></pre></article></body></html>
+        const lightbox = new PhotoSwipeLightbox({
+            gallerySelector: '.article-content',
+            childSelector: 'figure a.image-link',
+            pswpModule: () => import("https:\/\/cdn.jsdelivr.net\/npm\/photoswipe@5.4.4\/dist\/photoswipe.esm.min.js")
+        });
+        lightbox.init();
+    }
+</script></main></div><script type=text/javascript src=/ts/main.8f587a582cd4e51d03a4840028b19d7deac2cee707cfe21ffe942b6666363a7f.js defer></script></body></html>
