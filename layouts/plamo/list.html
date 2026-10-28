@@ -1,59 +1,45 @@
-{{ define "head" }}
-<link rel="stylesheet" href="{{ "css/plamo.css" | relURL }}">
-{{ end }}
-
 {{ define "main" }}
-<article class="plamo-index">
-  <header><h1>{{ .Title }}</h1></header>
-  {{ .Content }}
+<header>
+    <h3 class="section-title">{{ T "list.section" }}</h3>
+    <div class="section-card">
+        <div class="section-details">
+            <h3 class="section-count">{{ T "list.page" (len .RegularPages) }}</h3>
+            <h1 class="section-term">{{ .Title }}</h1>
+            {{ with .Plain }}
+                <h2 class="section-description">{{ . }}</h2>
+            {{ end }}
+        </div>
+    </div>
+</header>
 
-  {{ $groups := slice
+{{ $groups := slice
     (dict "label" "制作中" "status" "制作中" "sort" "Params.start")
     (dict "label" "完成" "status" "完成" "sort" "Params.finish")
-  }}
-  {{ range $groups }}
-  <section class="plamo-group">
-    <h2>{{ .label }}</h2>
-    {{ $items := where $.RegularPages "Params.status" .status }}
-    {{ $items = sort $items .sort "desc" }}
-    {{ if $items }}
-    <ul class="plamo-cards">
-      {{ range $items }}
-      <li>
-        <a href="{{ .RelPermalink }}">
-          {{ partial "plamo-thumb.html" . }}
-          <span class="plamo-card-title">{{ .Params.kit | default .Title }}</span>
-          {{ if or .Params.maker .Params.scale }}
-          <span class="plamo-card-meta">
-            {{ with .Params.maker }}<span>{{ . }}</span>{{ end }}
-            {{ with .Params.scale }}<span>{{ . }}</span>{{ end }}
-          </span>
-          {{ end }}
-        </a>
-      </li>
-      {{ end }}
-    </ul>
-    {{ else }}
-    <p class="plamo-empty">まだありません</p>
+}}
+{{ range $groups }}
+<h2 class="section-title">{{ .label }}</h2>
+{{ $items := where $.RegularPages "Params.status" .status }}
+{{ $items = sort $items .sort "desc" }}
+{{ if $items }}
+<section class="article-list">
+    {{ range $items }}
+        {{ partial "article-list/default" . }}
     {{ end }}
-  </section>
-  {{ end }}
+</section>
+{{ else }}
+<p>まだありません</p>
+{{ end }}
+{{ end }}
 
-  {{ $other := where .RegularPages "Params.status" "not in" (slice "制作中" "完成") }}
-  {{ with $other }}
-  <section class="plamo-group">
-    <h2>その他</h2>
-    <ul class="plamo-cards">
-      {{ range . }}
-      <li>
-        <a href="{{ .RelPermalink }}">
-          {{ partial "plamo-thumb.html" . }}
-          <span class="plamo-card-title">{{ .Params.kit | default .Title }}</span>
-        </a>
-      </li>
-      {{ end }}
-    </ul>
-  </section>
-  {{ end }}
-</article>
+{{ $other := where .RegularPages "Params.status" "not in" (slice "制作中" "完成") }}
+{{ with $other }}
+<h2 class="section-title">その他</h2>
+<section class="article-list">
+    {{ range . }}
+        {{ partial "article-list/default" . }}
+    {{ end }}
+</section>
+{{ end }}
+
+{{ partialCached "footer/footer" . }}
 {{ end }}

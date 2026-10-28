@@ -1,5 +1,6 @@
 *~
 public/
+resources/
 .hugo_build.lock
 .playwright-mcp/
 __pycache__/

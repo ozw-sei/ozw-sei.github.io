@@ -1,0 +1,17 @@
+<section class="article-content">
+    {{- if eq .Section "plamo" -}}
+        {{- with .Params.status -}}<p><strong>{{ . }}</strong></p>{{- end -}}
+        {{- if or .Params.kit .Params.maker .Params.scale .Params.start .Params.finish -}}
+        <ul>
+            {{- with .Params.kit -}}<li>キット: {{ . }}</li>{{- end -}}
+            {{- with .Params.maker -}}<li>メーカー: {{ . }}</li>{{- end -}}
+            {{- with .Params.scale -}}<li>スケール: {{ . }}</li>{{- end -}}
+            {{- with .Params.start -}}<li>開始: {{ . }}</li>{{- end -}}
+            {{- with .Params.finish -}}<li>完成: {{ . }}</li>{{- end -}}
+        </ul>
+        {{- end -}}
+    {{- end -}}
+    <!-- Refer to https://discourse.gohugo.io/t/responsive-tables-in-markdown/10639/5 -->
+    {{ $wrappedTable := printf "<div class=\"table-wrapper\">${1}</div>" }}
+    {{ .Content | replaceRE "(<table>(?:.|\n)+?</table>)" $wrappedTable | safeHTML }}
+</section>

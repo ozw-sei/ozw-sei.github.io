@@ -2,7 +2,7 @@
 
 最初に `pre-commit install`（または `make setup`）を一度実行する。写真に EXIF / GPS が残っているとコミットできない。公開する JPEG は、その前に `scripts/compress-photos.py` を通す。
 
-Hugo extended 0.168.0 でビルドします。テーマ `contrast-hugo` は git submodule です。
+Hugo extended 0.168.0 でビルドします。テーマ [Stack](https://github.com/CaiJimmy/hugo-theme-stack) は `themes/hugo-theme-stack` の git submodule です。SCSS は Dart Sass（`sass` コマンド）でコンパイルします。
 
 ```sh
 git submodule update --init
@@ -27,7 +27,19 @@ hugo new content plamo/kit-name/index.md
 
 `draft: true` の間は出ません。公開するときは `draft: false` にします。
 
-写真は同じディレクトリに置きます。公開用の JPEG は下の圧縮スクリプトで作ります。一覧のサムネイルは `thumbnail.jpg` で、無ければ最初の画像です。画像が無いページはプレースホルダになります。
+写真は同じディレクトリに置きます。公開用の JPEG は下の圧縮スクリプトで作ります。
+
+カードのカバーはフロントマターの `image` です。指定が無いページは、一覧にカバーを出しません。
+
+```yaml
+image: "cover.jpg"
+```
+
+複数枚をギャラリーにするときは、同じ行に画像を並べ、あいだを半角スペース2つにします。
+
+```markdown
+![背中](back.jpg)  ![腹](belly.jpg)
+```
 
 ## 完成にする
 

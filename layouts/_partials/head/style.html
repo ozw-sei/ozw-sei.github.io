@@ -1,0 +1,9 @@
+{{/*
+  The theme compiles with toCSS (deprecated LibSass). Use Dart Sass instead.
+  Stack still uses Sass @import, which Dart Sass warns about; silencing that
+  one deprecation avoids forking the theme stylesheets.
+*/}}
+{{ $sass := resources.Get "scss/style.scss" }}
+{{ $opts := dict "transpiler" "dartsass" "silenceDeprecations" (slice "import" "global-builtin") }}
+{{ $style := $sass | css.Sass $opts | minify | resources.Fingerprint "sha256" }}
+<link rel="stylesheet" href="{{ $style.RelPermalink }}">
